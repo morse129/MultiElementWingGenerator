@@ -1,0 +1,80 @@
+<deployment-project plugin="plugin.apptool" plugin-version="1.0">
+  <configuration build-checksum="2049078405" file="/Users/ntmorse/Documents/MATLAB/FSAE/Multi-Element Wing Generator.prj" location="/Users/ntmorse/Documents/MATLAB/FSAE" name="Multi-Element Wing Generator" target="target.mlapps" target-name="Package App">
+    <param.appname>Multi-Element Wing Generator</param.appname>
+    <param.authnamewatermark>Nick Morse</param.authnamewatermark>
+    <param.email>morse129@umn.edu</param.email>
+    <param.company>Gopher Motorsports - UMN FSAE</param.company>
+    <param.icon>${PROJECT_ROOT}/Multi-Element Wing Generator_resources/icon_24.png</param.icon>
+    <param.icons>
+      <file>${PROJECT_ROOT}/Multi-Element Wing Generator_resources/icon_48.png</file>
+      <file>${PROJECT_ROOT}/Multi-Element Wing Generator_resources/icon_24.png</file>
+      <file>${PROJECT_ROOT}/Multi-Element Wing Generator_resources/icon_16.png</file>
+    </param.icons>
+    <param.summary>Parametric wing generator for 2- and 3-element wings. Wings can be output in SolidWorks or ANSYS curve file format.</param.summary>
+    <param.description>&lt;b&gt;&lt;i&gt;Inputs:&lt;/i&gt;&lt;/b&gt; 
+Box height and width for wing to fit within (can be based off of rules box),
+Main element: airfoil profile, chord length, angle of attack,
+Flap 1: airfoil profile,
+Flap 2: airfoil profile, chord length, angle of attack,
+Slot gaps 1 and 2 can also be specified (default values are 2 percent of box diagonal).
+&lt;b&gt;&lt;i&gt;Outputs:&lt;/i&gt;&lt;/b&gt; 
+Wing geometry files are saved in either SolidWorks (3 curve files) or ANSYS (1 curve file) format. An accompanying wing parameter text file detailing the parameters of the generated wing is also saved. All files are saved in the current folder.
+&lt;b&gt;&lt;i&gt;Adding Airfoils:&lt;/i&gt;&lt;/b&gt; 
+Airfoils can be added to the program by adding their name and coordinates to the structure (airfoil.name and airfoil.coord, respectively) in the airfoildatabase.mat file. Airfoil coordinates must be given in (x,y) coordinates. The coordinate points must start from the trailing edge, move forward to the leading edge, and continue back to the trailing edge.</param.description>
+    <param.screenshot />
+    <param.version>2.2</param.version>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.output>/Users/ntmorse/Documents/MATLAB/FSAE</param.output>
+    <param.guid>1c5cdbd2-6a0b-48a9-bec7-250ca4ed6035</param.guid>
+    <unset>
+      <param.screenshot />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+      <param.output />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}/Wing_Generator.m</file>
+    </fileset.main>
+    <fileset.depfun>
+      <file>${PROJECT_ROOT}/Wing_Generator.fig</file>
+      <file>${PROJECT_ROOT}/airfoildatabase.mat</file>
+    </fileset.depfun>
+    <fileset.resources />
+    <fileset.package />
+    <build-deliverables>
+      <file location="/Users/ntmorse/Documents/MATLAB" name="FSAE" optional="false">/Users/ntmorse/Documents/MATLAB/FSAE</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>/Applications/MATLAB_R2018b.app</root>
+      <toolboxes>
+        <toolbox name="neuralnetwork" />
+      </toolboxes>
+      <toolbox>
+        <neuralnetwork>
+          <enabled>true</enabled>
+        </neuralnetwork>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>true</unix>
+      <mac>true</mac>
+      <windows>false</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>10.16</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>maci64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
