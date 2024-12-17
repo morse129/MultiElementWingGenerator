@@ -2,11 +2,18 @@
 
 ![gui_image](/MultiElementWingGenerator_resources/screenshot.png)
 
+
 ## What is it?
 
 A MATLAB Graphical User Interface (GUI) app that I wrote as an undergrad on the Gopher Motorsports Formula SAE team at the University of Minnesota to parameterize two- and three-element wings.
 
 In the Formula SAE rules (at least at the time), the wings were required to fit in a rules box. This app takes the airfoil profile, length, and angle of the main element (and optionally a second flap) and fits the first flap given desired slot gaps to make the entire wing fit within the defined box. The wing profile can then be saved in SolidWorks or ANSYS file formats for input into your favorite CFD software.
+
+
+## How do I install it?
+
+Simply download **MultiElementWingGenerator.mlappinstall**, navigate to the **Apps** tab in MATLAB, and click **Install App**. Select the file **MultiElementWingGenerator.mlappinstall** to complete the installation. Then the app can be opened from the Apps Toolbar.
+
 
 ## How do I use it?
 
@@ -52,6 +59,6 @@ Airfoils can be added by adding their name and coordinates to the structure (air
 
 ## Credit
 
-If you gained any value out of this app, give it a star!
+If you gained any value out of this app, give it a star on GitHub!
 
 This app was created by Nick Morse. I'm not actively maintaining this repo, but if you encounter problems, please raise them as an [issue](https://github.com/morse129/MultiElementWingGenerator/issues).
