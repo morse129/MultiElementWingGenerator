@@ -1,6 +1,7 @@
 %% Multi-Element Wing Generator
 
-% Copyright (c) 2022, Nick Morse
+% Copyright (c) 2017, Nick Morse
+% See license agreement
 
 % To add an airfoil add add its name and coordinates to airfoildatabase.mat
 
@@ -215,7 +216,7 @@ Ain1=Ain1'/Ain1(1,1);
 
 % Scale airfoil
 Ain1=chord1*Ain1;
-filename1=strcat(filename1, '_', num2str(chord1),'in');
+filename1=strcat(filename1, '_chord', num2str(chord1));
 
 % Invert airfoil if necessary
 mn1=min(Ain1);
@@ -231,7 +232,7 @@ R3=[cosd(AoA1), -sind(AoA1), 0;
     sind(AoA1), cosd(AoA1), 0;
     0, 0, 1];
 Ain1=R3*Ain1;
-handles.filename1=strcat(filename1, '_', num2str(AoA1), 'deg');
+handles.filename1=strcat(filename1, '_angle', num2str(AoA1));
 
 Ain1=Ain1';
 
@@ -281,7 +282,7 @@ if q==1 % 2 flaps
 
     % Scale airfoil
     Ain2=chord2*Ain2;
-    filename2=strcat(filename2,'_', num2str(chord2),'in');
+    filename2=strcat(filename2,'_chord', num2str(chord2));
 
     % Invert airfoil if necessary
     mn2=min(Ain2);
@@ -297,13 +298,14 @@ if q==1 % 2 flaps
         sind(AoA2), cosd(AoA2), 0;
         0, 0, 1];
     Ain2=R3*Ain2;
-    handles.filename2=strcat(filename2, '_', num2str(AoA2), 'deg');
+    handles.filename2=strcat(filename2, '_angle', num2str(AoA2));
 
     Ain2=Ain2';
     mx2=max(Ain2);
 
     % Shift airfoil vertically so top is at top of box
     Ain2(:,2)=Ain2(:,2)+height-mx2(2);
+    
     % Shift airfoil horizontally so back is at back of box
     Ain2(:,1)=Ain2(:,1)+base-mx2(1);
 
@@ -428,7 +430,7 @@ Ain3(:,1)=Ain3(:,1)+Ain1(1,1)-gap1x;
 % Shift airfoil vertically into final position
 Ain3(:,2)=Ain3(:,2)+Ain1(1,2)+gap1y;
 
-handles.filename3=strcat(filename3,'_', num2str(xrat),'in_',num2str(c),'deg');
+handles.filename3=strcat(filename3,'_', num2str(xrat),'_',num2str(c),'deg');
 
 
 %% Plot
@@ -437,20 +439,26 @@ axes(handles.axes1)
 cla
 rectangle('Position', [0 0 base height], 'EdgeColor', 'k', 'LineWidth', 1)
 hold on
-fnplt(cscvn(Ain1(:,1:2)'), 'b') % Main Element
-hold on
-plot(Ain1(:,1),Ain1(:,2),'.b', 'MarkerSize', 13)
-hold on
-fnplt(cscvn(Ain3(:,1:2)'), 'b') % Flap 1
-hold on
-plot(Ain3(:,1),Ain3(:,2),'.b', 'MarkerSize', 13)
-hold on
-if q==1 % 2 flaps
-    fnplt(cscvn(Ain2(:,1:2)'), 'b') % Flap 2
-    hold on
-    plot(Ain2(:,1),Ain2(:,2),'.b', 'MarkerSize', 13)
-    hold on
+if(license('test', 'curve_fitting_toolbox'))
+    fnplt(cscvn(Ain1(:,1:2)'), 'b') % Main Element
+    plot(Ain1(:,1),Ain1(:,2),'.b', 'MarkerSize', 13)
+
+    fnplt(cscvn(Ain3(:,1:2)'), 'b') % Flap 1
+    plot(Ain3(:,1),Ain3(:,2),'.b', 'MarkerSize', 13)
+
+    if q==1 % 2 flaps
+        fnplt(cscvn(Ain2(:,1:2)'), 'b') % Flap 2
+        plot(Ain2(:,1),Ain2(:,2),'.b', 'MarkerSize', 13)
+    end
+else
+    plot(Ain1(:,1),Ain1(:,2),'.-b', 'MarkerSize', 13)
+    plot(Ain3(:,1),Ain3(:,2),'.-b', 'MarkerSize', 13)
+
+    if q==1 % 2 flaps
+        plot(Ain2(:,1),Ain2(:,2),'.-b', 'MarkerSize', 13)
+    end
 end
+
 axis equal
 frame=0.05*base;
 xlim([0-frame base+frame])
@@ -506,11 +514,11 @@ end
 
 q=handles.q;
 
-saven=strcat(saven, num2str(handles.base), 'inx', num2str(handles.height), 'in_');
+saven=strcat(saven, 'box', num2str(handles.base), 'x', num2str(handles.height), '_');
 
-filename1=strcat('ME_',handles.filename1, '_slot1_x', num2str(handles.gap1x), 'in_y', num2str(handles.gap1y), 'in_');
+filename1=strcat('ME_',handles.filename1, '_slot1_x', num2str(handles.gap1x), '_y', num2str(handles.gap1y), '_');
 if q==1 % 2 flaps
-    filename3=strcat('F1_',handles.filename3, '_slot2_x', num2str(handles.gap2x), 'in_y', num2str(handles.gap2y), 'in_');
+    filename3=strcat('F1_',handles.filename3, '_slot2_x', num2str(handles.gap2x), '_y', num2str(handles.gap2y), '_');
     if strcmp(type, 'ANSYS') % ANSYS
         filename2=strcat('F2_',handles.filename2, '_ANSYS.txt');
         outfile=strcat(saven,filename1,filename3,filename2);
@@ -574,7 +582,7 @@ saventext = get(handles.savename,'String');
 if ~isempty(saventext)
     saventextb=strcat(saventext, '_');
 end
-outfiletext = strcat(saventext, 'wing_parameters.txt');
+outfiletext = strcat(saventext, '_wing_parameters.txt');
 
 fileIDtext=fopen(outfiletext, 'w');
 
@@ -587,32 +595,32 @@ strdate = date;
 fprintf(fileIDtext, ['  Created: ',strdate,'\r\n']);
 
 fprintf(fileIDtext, '\r\nBox Size:\r\n');
-fprintf(fileIDtext, '  Length: %g in\r\n', handles.base);
-fprintf(fileIDtext, '  Height: %g in\r\n', handles.height);
+fprintf(fileIDtext, '  Length: %g\r\n', handles.base);
+fprintf(fileIDtext, '  Height: %g\r\n', handles.height);
 
 fprintf(fileIDtext, '\r\nMain Element:\r\n');
 fprintf(fileIDtext, ['  Airfoil: ', handles.airfoil1, '\r\n']);
-fprintf(fileIDtext, '  Chord length: %g in\r\n', handles.chord1);
+fprintf(fileIDtext, '  Chord length: %g\r\n', handles.chord1);
 fprintf(fileIDtext, '  Angle: %g deg\r\n', handles.AoA1);
 
 fprintf(fileIDtext, '\r\nSlot Gap 1:\r\n');
-fprintf(fileIDtext, '  Horizontal: %g in\r\n', handles.gap1x);
-fprintf(fileIDtext, '  Vertical: %g in\r\n', handles.gap1y);
+fprintf(fileIDtext, '  Horizontal: %g\r\n', handles.gap1x);
+fprintf(fileIDtext, '  Vertical: %g\r\n', handles.gap1y);
 
 fprintf(fileIDtext, '\r\nFlap 1:\r\n');
 fprintf(fileIDtext, ['  Airfoil: ', handles.airfoil3, '\r\n']);
-fprintf(fileIDtext, '  Chord length: %g in\r\n', handles.chord3);
+fprintf(fileIDtext, '  Chord length: %g\r\n', handles.chord3);
 fprintf(fileIDtext, '  Angle: %g deg\r\n', handles.AoA3);
 
 
 if q==1 % 2 flaps
     fprintf(fileIDtext, '\r\nSlot Gap 2:\r\n');
-    fprintf(fileIDtext, '  Horizontal: %g in\r\n', handles.gap2x);
-    fprintf(fileIDtext, '  Vertical: %g in\r\n', handles.gap2y);
+    fprintf(fileIDtext, '  Horizontal: %g\r\n', handles.gap2x);
+    fprintf(fileIDtext, '  Vertical: %g\r\n', handles.gap2y);
 
     fprintf(fileIDtext, '\r\nFlap 2:\r\n');
     fprintf(fileIDtext, ['  Airfoil: ', handles.airfoil2, '\r\n']);
-    fprintf(fileIDtext, '  Chord length: %g in\r\n', handles.chord2);
+    fprintf(fileIDtext, '  Chord length: %g\r\n', handles.chord2);
     fprintf(fileIDtext, '  Angle: %g deg\r\n', handles.AoA2);
 end
 fclose(fileIDtext);
